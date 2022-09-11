@@ -45,11 +45,6 @@ export const Settings = styled(({ className, setIsOpen }) => {
   const handleClose = () => {
     console.log(form);
     for (const field in form) {
-      console.log(
-        `${field} - form:${form[field]} | control:${controls[field]} | === ${
-          form[field] === controls[field]
-        }}`
-      );
       if (controls[field] !== form[field]) setField(field, form[field]);
     }
     setIsOpen(false);

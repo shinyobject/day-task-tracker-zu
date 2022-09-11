@@ -9,7 +9,6 @@ export const FreeBlocks = styled(({ className }) => {
   const blocks = useBlocks((state) => state.blocks);
   const blockArray = Object.values(blocks).filter((block) => {
     const blockTime = block.blockId.match(/.*-(\d*[.]*\d*)/)[1] * 1;
-    console.log(block.blockId, blockTime, blockTime >= startHour);
     if (blockTime >= startHour) return true;
     return false;
   });
