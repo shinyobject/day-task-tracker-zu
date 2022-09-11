@@ -40,13 +40,13 @@ export const Main = styled(({ className }) => {
 
   return (
     <div className={className}>
-      <Controls setIsOpen={setIsOpen} />
+      <Controls isOpen={isOpen} setIsOpen={setIsOpen} />
       <TimeLine />
       <Blocks />
       <Tasks />
       <FreeBlocks />
       <TaskBars />
-      {isOpen && <Settings />}
+      {isOpen && <Settings setIsOpen={setIsOpen} />}
     </div>
   );
 })`
