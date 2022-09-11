@@ -1,14 +1,23 @@
 import styled from "styled-components";
+import shallow from "zustand/shallow";
 import { hour12, hour24 } from "utils/hour";
 import { Label } from "./Label";
 import { useControls } from "store";
 
 export const TimeLine = styled(({ className }) => {
-  const use24HourTime = useControls((state) => state.use24HourTime);
-  const startHour = useControls((state) => state.startHour);
-  const numberOfHours = useControls((state) => state.numberOfHours);
-  const blockSize = useControls((state) => state.blockSize);
-
+  // const use24HourTime = useControls((state) => state.use24HourTime);
+  // const startHour = useControls((state) => state.startHour);
+  // const numberOfHours = useControls((state) => state.numberOfHours);
+  // const blockSize = useControls((state) => state.blockSize);
+  const { use24HourTime, blockSize, startHour, numberOfHours } = useControls(
+    (state) => ({
+      use24HourTime: state.use24HourTime,
+      blockSize: state.blockSize,
+      startHour: state.startHour,
+      numberOfHours: state.numberOfHours,
+    }),
+    shallow
+  );
   // Local constants
   const numberOfBlocksPerLine = 2;
   const gapBetweenBlocks = 8;
@@ -17,7 +26,7 @@ export const TimeLine = styled(({ className }) => {
   return (
     <div className={className}>
       {[...Array(numberOfHours * 2)].map((item, index) => {
-        const timeId = startHour + index * 0.5;
+        const timeId = startHour * 1 + index * 0.5;
         return (
           timeId % 1 === 0 && (
             <Label key={`TimeLine-${timeId}`} width={labelWidth}>

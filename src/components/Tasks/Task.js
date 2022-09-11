@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import { DoneToggle } from "./DoneToggle";
 import { TaskName } from "./TaskName";
@@ -9,6 +9,8 @@ import { useTasks } from "store";
 export const Task = styled(({ className, task }) => {
   const [internalName, setInternalName] = useState(task.name);
   const [internalLength, setInternalLength] = useState(task.length);
+  const nameRef = useRef();
+  const lengthRef = useRef();
 
   const setTask = useTasks((state) => state.setTask);
   const removeTask = useTasks((state) => state.removeTask);
@@ -28,11 +30,15 @@ export const Task = styled(({ className, task }) => {
     <div className={className}>
       <DoneToggle checked={task.done} onChange={handleDone} />
       <TaskName
+        ref={nameRef}
+        onFocus={() => nameRef.current.select()}
         value={internalName}
         onChange={(e) => setInternalName(e.target.value)}
         onBlur={handleNameChange}
       />
       <TaskLength
+        ref={lengthRef}
+        onFocus={() => lengthRef.current.select()}
         value={internalLength}
         onChange={(e) => setInternalLength(e.target.value)}
         onBlur={handleLengthChange}
@@ -40,4 +46,11 @@ export const Task = styled(({ className, task }) => {
       <RemoveTask onClick={handleRemoveTask}>&#xd7;</RemoveTask>
     </div>
   );
-})``;
+})`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  &.done {
+    background: #cdffa0;
+  }
+`;

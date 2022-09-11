@@ -11,7 +11,15 @@ export const Tasks = styled(({ className }) => {
   return (
     <div className={className}>
       {taskArray.map((task, index) => {
-        return <Task key={`Task-${task.taskId}`} task={task} />;
+        const doneClassName = task.done === true ? "done" : "";
+
+        return (
+          <Task
+            className={`${className} ${doneClassName}`}
+            key={`Task-${task.taskId}`}
+            task={task}
+          />
+        );
       })}
     </div>
   );
