@@ -14,6 +14,8 @@ export const Main = styled(({ className }) => {
   const startHour = useControls((state) => state.startHour);
   const numberOfHours = useControls((state) => state.numberOfHours);
 
+  // Rewrite this with setTimeout so it will run immediately and then run again.
+
   useEffect(() => {
     const interval = setInterval(() => {
       const currentTime = new Date();
