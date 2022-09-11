@@ -16,5 +16,6 @@ export const ClearAll = styled(({ className }) => {
     </button>
   );
 })`
-  ${controlButtonStyles}
+  border: 0;
+  background: transparent;
 `;
