@@ -13,7 +13,7 @@ const CloseButton = styled.button`
   width: fit-content;
 `;
 
-export const Settings = styled(({ className }) => {
+export const Settings = styled(({ className, setIsOpen }) => {
   const controls = useControls(
     (state) => ({
       use24HourTime: state.use24HourTime,
@@ -52,6 +52,7 @@ export const Settings = styled(({ className }) => {
       );
       if (controls[field] !== form[field]) setField(field, form[field]);
     }
+    setIsOpen(false);
   };
 
   return (
