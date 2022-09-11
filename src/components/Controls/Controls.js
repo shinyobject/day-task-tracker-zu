@@ -7,15 +7,23 @@ const Left = styled.div`
   display: flex;
   gap: 8px;
 `;
+const Right = styled.div`
+  display: flex;
+  gap: 8px;
+`;
 
 export const Controls = styled(({ className, setIsOpen }) => {
   return (
     <div className={className}>
       <Left>
         <AddTask />
-        <ClearAll />
       </Left>
-      <SettingsButton onClick={() => setIsOpen(true)}>Settings</SettingsButton>
+      <Right>
+        <SettingsButton onClick={() => setIsOpen(true)}>
+          Settings
+        </SettingsButton>
+        <ClearAll />
+      </Right>
     </div>
   );
 })`
