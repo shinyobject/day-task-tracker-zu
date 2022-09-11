@@ -29,9 +29,9 @@ export const Block = styled(({ className, blockId, status }) => {
     background: black;
   }
   &.taken1 {
-    background: pink;
+    background: #f509dd;
   }
   &.taken2 {
-    background: gold;
+    background: #f0d319;
   }
 `;
