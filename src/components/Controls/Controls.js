@@ -12,14 +12,14 @@ const Right = styled.div`
   gap: 8px;
 `;
 
-export const Controls = styled(({ className, setIsOpen }) => {
+export const Controls = styled(({ className, isOpen, setIsOpen }) => {
   return (
     <div className={className}>
       <Left>
         <AddTask />
       </Left>
       <Right>
-        <SettingsButton onClick={() => setIsOpen(true)}>
+        <SettingsButton onClick={() => setIsOpen(!isOpen)}>
           Settings
         </SettingsButton>
         <ClearAll />
