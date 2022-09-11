@@ -23,6 +23,7 @@ export const Block = styled(({ className, blockId, status }) => {
   height: 25px;
 
   border: 1px solid black;
+  background: transparent;
 
   &.past {
     background: black;
