@@ -14,7 +14,7 @@ export const TaskBars = styled(({ className }) => {
   const blocksArray = Object.values(blocks);
   const timeLeft = blocksArray.reduce(
     (previous, current) =>
-      current.status === "past" ? previous - 1 : previous,
+      current.status !== "free" ? previous - 1 : previous,
     numberOfHours * 2
   );
 
