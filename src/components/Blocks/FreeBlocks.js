@@ -19,7 +19,6 @@ export const FreeBlocks = styled(({ className }) => {
   );
 
   if (usedTime >= numberOfHours * 2) return;
-
   return (
     <div className={className}>
       {[...Array(numberOfHours * 2 - usedTime)].map((item, index) => (
