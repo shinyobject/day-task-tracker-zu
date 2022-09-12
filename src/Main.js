@@ -5,7 +5,7 @@ import { Controls } from "components/Controls";
 import { FreeBlocks } from "components/Blocks";
 import { Tasks, TaskBars } from "components/Tasks";
 import { TimeLine } from "components/TimeLine";
-import { useBlocks, useControls, useTasks } from "store";
+import { useBlocks, useControls, useTasks, useDate } from "store";
 import { Settings } from "components/Settings";
 
 export const Main = styled(({ className }) => {
@@ -13,10 +13,20 @@ export const Main = styled(({ className }) => {
   const setBlock = useBlocks((state) => state.setBlock);
   const startHour = useControls((state) => state.startHour);
   const numberOfHours = useControls((state) => state.numberOfHours);
+  const clearAllBlocks = useBlocks((state) => state.clearAllBlocks);
+  const clearAllTasks = useTasks((state) => state.clearAllTasks);
+  const date = useDate((state) => state.date);
+  const setDate = useDate((state) => state.setDate);
 
   // Rewrite this with setTimeout so it will run immediately and then run again.
 
   useEffect(() => {
+    const now = new Date();
+    if (now.getDate() !== date) {
+      clearAllBlocks();
+      clearAllTasks();
+      setDate(now.getDate());
+    }
     const interval = setInterval(() => {
       const currentTime = new Date();
       const hours = currentTime.getHours();

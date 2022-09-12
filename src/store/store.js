@@ -79,3 +79,15 @@ export const useControls = create(
     { name: "controls" }
   )
 );
+
+const today = new Date();
+console.log("today", today.getTime());
+export const useDate = create(
+  persist(
+    (set) => ({
+      date: today.getDate(),
+      setDate: (day) => set((state) => ({ date: day })),
+    }),
+    { name: "date" }
+  )
+);
