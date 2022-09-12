@@ -15,7 +15,7 @@ export const Tasks = styled(({ className }) => {
 
         return (
           <Task
-            className={`${className} ${doneClassName}`}
+            className={doneClassName}
             key={`Task-${task.taskId}`}
             task={task}
           />
@@ -23,4 +23,6 @@ export const Tasks = styled(({ className }) => {
       })}
     </div>
   );
-})``;
+})`
+  margin: 10px 0;
+`;
