@@ -22,6 +22,7 @@ export const TaskBars = styled(({ className }) => {
     <div className={className}>
       {tasksToDo.map((task, index) => {
         const hasEnoughTimeLeft = task.length * 1 <= timeLeft - timeUsed;
+        console.log(task.length, timeLeft, timeUsed);
         timeUsed += task.length * 1;
         return (
           <TaskBar
