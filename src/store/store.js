@@ -81,7 +81,6 @@ export const useControls = create(
 );
 
 const today = new Date();
-console.log("today", today.getTime());
 export const useDate = create(
   persist(
     (set) => ({
