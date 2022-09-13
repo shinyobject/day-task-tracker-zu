@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import { TaskBar } from "./Taskbar";
 import { useBlocks, useControls, useTasks } from "store";
@@ -18,11 +19,17 @@ export const TaskBars = styled(({ className }) => {
     numberOfHours * 2
   );
 
+  useEffect(() => {
+    const newTask = document.querySelector('input[value="new task"]');
+    if (newTask) {
+      newTask.focus();
+    }
+  }, [tasks]);
+
   return (
     <div className={className}>
       {tasksToDo.map((task, index) => {
         const hasEnoughTimeLeft = task.length * 1 <= timeLeft - timeUsed;
-        console.log(task.length, timeLeft, timeUsed);
         timeUsed += task.length * 1;
         return (
           <TaskBar
