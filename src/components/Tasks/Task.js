@@ -6,12 +6,13 @@ import { TaskLength } from "./TaskLength";
 import { RemoveTask } from "./RemoveTask";
 import { useTasks } from "store";
 
-export const Task = styled(({ className, task }) => {
+export const Task = styled(({ className, task, lastTask }) => {
   const [internalName, setInternalName] = useState(task.name);
   const [internalLength, setInternalLength] = useState(task.length);
   const nameRef = useRef();
   const lengthRef = useRef();
 
+  const newTask = useTasks((state) => state.newTask);
   const setTask = useTasks((state) => state.setTask);
   const removeTask = useTasks((state) => state.removeTask);
   const handleDone = () => {
@@ -22,6 +23,11 @@ export const Task = styled(({ className, task }) => {
   };
   const handleLengthChange = () => {
     setTask({ ...task, length: internalLength });
+  };
+  const handleLastTaskTab = (e) => {
+    if (e.key === "Tab" && lastTask === true) {
+      newTask();
+    }
   };
   const handleRemoveTask = () => {
     removeTask(task.taskId);
@@ -42,6 +48,7 @@ export const Task = styled(({ className, task }) => {
         value={internalLength}
         onChange={(e) => setInternalLength(e.target.value)}
         onBlur={handleLengthChange}
+        onKeyDown={handleLastTaskTab}
       />
       <RemoveTask onClick={handleRemoveTask}>&#xd7;</RemoveTask>
     </div>
