@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import shallow from "zustand/shallow";
 import styled from "styled-components";
 import { useControls } from "store";
+import { ClearAll } from "./ClearAll";
 
 const Row = styled.div`
   display: flex;
@@ -51,6 +52,10 @@ export const Settings = styled(({ className, setIsOpen }) => {
 
   return (
     <div className={className}>
+      <h2>Settings</h2>
+      <Row>
+        Clear all task and block data <ClearAll />
+      </Row>
       <Row>
         <input
           type="checkbox"
@@ -97,8 +102,19 @@ export const Settings = styled(({ className, setIsOpen }) => {
   input[type="text"] {
     width: 3ch;
   }
-  margin-top: 16px;
+  h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 10;
 `;

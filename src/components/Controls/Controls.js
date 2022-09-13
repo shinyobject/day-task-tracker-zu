@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { AddTask } from "./AddTask";
-import { ClearAll } from "./ClearAll";
 import { SettingsButton } from "./SettingsButton";
 
 const Left = styled.div`
@@ -22,7 +21,6 @@ export const Controls = styled(({ className, isOpen, setIsOpen }) => {
         <SettingsButton onClick={() => setIsOpen(!isOpen)}>
           Settings
         </SettingsButton>
-        <ClearAll />
       </Right>
     </div>
   );
