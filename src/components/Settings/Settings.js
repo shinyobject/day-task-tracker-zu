@@ -43,7 +43,6 @@ export const Settings = styled(({ className, setIsOpen }) => {
     setForm({ ...form, [field]: value });
   };
   const handleClose = () => {
-    console.log(form);
     for (const field in form) {
       if (controls[field] !== form[field]) setField(field, form[field]);
     }
