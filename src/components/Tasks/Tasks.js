@@ -18,6 +18,7 @@ export const Tasks = styled(({ className }) => {
             className={doneClassName}
             key={`Task-${task.taskId}`}
             task={task}
+            lastTask={index === taskArray.length - 1}
           />
         );
       })}
