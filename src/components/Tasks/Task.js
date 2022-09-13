@@ -61,6 +61,11 @@ export const Task = styled(({ className, task, lastTask }) => {
     background: #cdffa0;
   }
   position: relative;
+  ${RemoveTask}:hover {
+    background: red;
+    color: white;
+    border-radius: 4px;
+  }
   ${RemoveTask}:hover::after {
     content: "";
     cursor: pointer;
