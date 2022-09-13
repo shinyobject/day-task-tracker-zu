@@ -60,4 +60,16 @@ export const Task = styled(({ className, task, lastTask }) => {
   &.done {
     background: #cdffa0;
   }
+  position: relative;
+  ${RemoveTask}:hover::after {
+    content: "";
+    cursor: pointer;
+    background: #ff000020;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
 `;
