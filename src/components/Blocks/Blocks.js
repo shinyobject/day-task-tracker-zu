@@ -22,7 +22,6 @@ export const Blocks = styled(({ className }) => {
     return (
       <Block
         key={blockId}
-        time={timeId}
         blockId={blockId}
         status={blockStatus}
         size={blockSize}
