@@ -28,5 +28,6 @@ export const FreeBlocks = styled(({ className }) => {
   );
 })`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 `;
