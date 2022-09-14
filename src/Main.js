@@ -7,6 +7,7 @@ import { Tasks, TaskBars } from "components/Tasks";
 import { TimeLine } from "components/TimeLine";
 import { useBlocks, useControls, useTasks, useDate } from "store";
 import { Settings } from "components/Settings";
+import { TimeAndBlocks } from "components/TimeAndBlocks";
 
 export const Main = styled(({ className }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,8 +52,10 @@ export const Main = styled(({ className }) => {
   return (
     <div className={className}>
       <Controls isOpen={isOpen} setIsOpen={setIsOpen} />
-      <TimeLine />
-      <Blocks />
+      {/* <TimeLine />
+      <Blocks /> */}
+      <TimeAndBlocks />
+
       <Tasks />
       <FreeBlocks />
       <TaskBars />

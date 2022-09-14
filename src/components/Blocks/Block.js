@@ -3,9 +3,8 @@ import { useBlocks } from "store";
 
 const statusArray = ["free", "taken1", "taken2"];
 
-export const Block = styled(({ className, blockId, status }) => {
+export const Block = styled(({ className, blockId, status, size }) => {
   const setBlock = useBlocks((state) => state.setBlock);
-
   const handleStatus = () => {
     const currentIndex = statusArray.findIndex((value) => value === status);
     const nextIndex = (currentIndex + 1) % statusArray.length;
@@ -19,8 +18,8 @@ export const Block = styled(({ className, blockId, status }) => {
     ></button>
   );
 })`
-  width: 25px;
-  height: 25px;
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
 
   border: 1px solid black;
   background: transparent;
