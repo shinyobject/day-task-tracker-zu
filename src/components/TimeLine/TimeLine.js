@@ -5,10 +5,6 @@ import { Label } from "./Label";
 import { useControls } from "store";
 
 export const TimeLine = styled(({ className }) => {
-  // const use24HourTime = useControls((state) => state.use24HourTime);
-  // const startHour = useControls((state) => state.startHour);
-  // const numberOfHours = useControls((state) => state.numberOfHours);
-  // const blockSize = useControls((state) => state.blockSize);
   const { use24HourTime, blockSize, startHour, numberOfHours } = useControls(
     (state) => ({
       use24HourTime: state.use24HourTime,
