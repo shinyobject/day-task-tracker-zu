@@ -44,21 +44,21 @@ export const useTasks = create(
         set((state) => {
           const newTasks = clone(state.tasks);
           newTasks[value.taskId] = value;
-          return { ...state, tasks: newTasks };
+          return { tasks: newTasks };
         }),
       newTask: () =>
         set((state) => {
           const currentTasks = clone(state.tasks);
           const newTask = initialTask();
-          return { ...state, tasks: { ...currentTasks, ...newTask } };
+          return { tasks: { ...currentTasks, ...newTask } };
         }),
       removeTask: (taskId) =>
         set((state) => {
           const newTasks = clone(state.tasks);
           delete newTasks[taskId];
-          return { ...state, tasks: newTasks };
+          return { tasks: newTasks };
         }),
-      clearAllTasks: () => set((state) => ({ ...state, tasks: {} })),
+      clearAllTasks: () => set((state) => ({ tasks: {} })),
     }),
     { name: "tasks" }
   )
