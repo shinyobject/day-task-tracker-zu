@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import shallow from "zustand/shallow";
 import styled from "styled-components";
-import { useControls } from "store";
+import { useControls, useBlocks } from "store";
 import { ClearAll } from "./ClearAll";
 
 const Row = styled.div`
@@ -26,6 +26,7 @@ export const Settings = styled(({ className, setIsOpen }) => {
   );
   const { use24HourTime, blockSize, startHour, numberOfHours } = controls;
   const setField = useControls((state) => state.setField);
+  const clearAllBlocks = useBlocks((state) => state.clearAllBlocks);
 
   const [form, setForm] = useState({
     use24HourTime,
@@ -45,7 +46,10 @@ export const Settings = styled(({ className, setIsOpen }) => {
   };
   const handleClose = () => {
     for (const field in form) {
-      if (controls[field] !== form[field]) setField(field, form[field]);
+      if (controls[field] !== form[field]) {
+        setField(field, form[field]);
+        clearAllBlocks();
+      }
     }
     setIsOpen(false);
   };
