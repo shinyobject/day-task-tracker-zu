@@ -1,8 +1,7 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
-import produce from "immer";
-import clone from "just-clone";
-import { nanoid } from "nanoid";
+import { clone } from "utils/clone";
+import { uuid } from "utils/uuid";
 
 export const useBlocks = create(
   persist(
@@ -24,7 +23,7 @@ export const useBlocks = create(
 );
 
 const initialTask = () => {
-  const id = nanoid();
+  const id = uuid();
   return {
     [id]: {
       taskId: id,

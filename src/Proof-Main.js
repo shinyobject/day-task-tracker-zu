@@ -5,7 +5,7 @@ import { FreeBlocks } from "components/Blocks";
 import { Tasks, TaskBars } from "components/Tasks";
 import { TimeLine } from "components/TimeLine";
 import { useBlocks, useControls, useTasks } from "store";
-import { nanoid } from "nanoid";
+import { uuid } from "utils/uuid";
 
 const DisplayTask = styled.div`
   display: grid;
@@ -30,13 +30,13 @@ export const Main = styled(({ className }) => {
   const setField = useControls((state) => state.setField);
   return (
     <div className={className}>
-      <button onClick={() => setBlock({ blockId: nanoid(), status: "free" })}>
+      <button onClick={() => setBlock({ blockId: uuid(), status: "free" })}>
         Add Block
       </button>
       <button
         onClick={() =>
           setTask({
-            taskId: nanoid(),
+            taskId: uuid(),
             name: "new task",
             done: false,
             enoughtTime: true,
