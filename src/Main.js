@@ -63,4 +63,5 @@ export const Main = styled(({ className }) => {
   );
 })`
   margin: 8px;
+  overflow-x: hidden;
 `;
