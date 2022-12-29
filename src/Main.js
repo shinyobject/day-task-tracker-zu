@@ -63,5 +63,4 @@ export const Main = styled(({ className }) => {
   );
 })`
   margin: 8px;
-  width: fit-content;
 `;
