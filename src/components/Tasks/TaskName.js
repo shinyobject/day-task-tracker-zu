@@ -5,4 +5,5 @@ export const TaskName = styled.input`
   ${inputStyles}
   flex-grow: 1;
   flex-shrink: 1;
+  flex-basis: 100%;
 `;
