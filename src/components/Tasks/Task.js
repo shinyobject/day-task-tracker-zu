@@ -44,7 +44,9 @@ export const Task = styled(({ className, task, lastTask }) => {
 
   return (
     <div className={className}>
-      <DoneToggle checked={task.done} onChange={handleDone} />
+      <label>
+        <DoneToggle checked={task.done} onChange={handleDone} />
+      </label>
       <TaskName
         ref={nameRef}
         onFocus={() => nameRef.current.select()}
@@ -89,5 +91,10 @@ export const Task = styled(({ className, task, lastTask }) => {
     right: 0;
     bottom: 0;
     left: 0;
+  }
+  label {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 10px;
   }
 `;
