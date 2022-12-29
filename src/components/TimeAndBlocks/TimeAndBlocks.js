@@ -25,11 +25,6 @@ export const TimeAndBlocks = styled(({ className }) => {
   for (let index = startHour; index < startHour + numberOfHours; index++) {
     const blockId1 = `Block-${index}`;
     const blockId2 = `Block-${index + 0.5}`;
-    // console.log(
-    //   `Block-${index}`,
-    //   blocks[`Block-${index}`],
-    //   blocks[`Block-${index}`] ?? "free"
-    // );
     const status1 = blocks[blockId1]?.status ?? "free";
     const status2 = blocks[blockId2]?.status ?? "free";
     displayBlocks.push(

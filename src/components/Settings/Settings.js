@@ -3,6 +3,7 @@ import shallow from "zustand/shallow";
 import styled from "styled-components";
 import { useControls, useBlocks } from "store";
 import { ClearAll } from "./ClearAll";
+import { controlButtonStyles } from "styles/controlButtonStyles";
 
 const Row = styled.div`
   display: flex;
@@ -11,6 +12,7 @@ const Row = styled.div`
 `;
 
 const CloseButton = styled.button`
+  ${controlButtonStyles}
   width: fit-content;
 `;
 
@@ -120,5 +122,9 @@ export const Settings = styled(({ className, setIsOpen }) => {
   left: 0;
   right: 0;
   background: white;
+  @media (prefers-color-scheme: dark) {
+    background: black;
+    color: white;
+  }
   z-index: 10;
 `;

@@ -22,6 +22,9 @@ export const Block = styled(({ className, blockId, status, size }) => {
   height: ${({ size }) => size}px;
 
   border: 1px solid black;
+  @media (prefers-color-scheme: dark) {
+    border-color: white;
+  }
   background: transparent;
 
   &.past {

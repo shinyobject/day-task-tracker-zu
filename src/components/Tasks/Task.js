@@ -72,6 +72,9 @@ export const Task = styled(({ className, task, lastTask }) => {
   align-items: center;
   &.done {
     background: #cdffa0;
+    @media (prefers-color-scheme: dark) {
+      background: darkgreen;
+    }
   }
   justify-content: space-between;
 
