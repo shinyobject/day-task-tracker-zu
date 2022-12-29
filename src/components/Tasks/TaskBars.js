@@ -44,6 +44,7 @@ export const TaskBars = styled(({ className }) => {
   );
 })`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
 `;
