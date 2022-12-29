@@ -25,13 +25,23 @@ export const Task = styled(({ className, task, lastTask }) => {
     setTask({ ...task, length: internalLength });
   };
   const handleLastTaskTab = (e) => {
-    if (e.key === "Tab" && lastTask === true) {
+    if (e.key.toLowerCase() === "tab" && lastTask === true) {
       newTask();
+    }
+    if (e.key.toLowerCase() === "enter") {
+      handleLengthChange();
+      lengthRef.current.blur();
     }
   };
   const handleRemoveTask = () => {
     removeTask(task.taskId);
   };
+  const handleKeyDownName = (e) => {
+    if (e.key.toLowerCase() === "enter") {
+      lengthRef.current.focus();
+    }
+  };
+
   return (
     <div className={className}>
       <DoneToggle checked={task.done} onChange={handleDone} />
@@ -41,6 +51,7 @@ export const Task = styled(({ className, task, lastTask }) => {
         value={internalName}
         onChange={(e) => setInternalName(e.target.value)}
         onBlur={handleNameChange}
+        onKeyDown={handleKeyDownName}
       />
       <TaskLength
         ref={lengthRef}
