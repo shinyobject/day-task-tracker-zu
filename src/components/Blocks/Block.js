@@ -22,9 +22,7 @@ export const Block = styled(({ className, blockId, status, size }) => {
   height: ${({ size }) => size}px;
 
   border: 1px solid black;
-  @media (prefers-color-scheme: dark) {
-    border-color: white;
-  }
+
   background: transparent;
 
   &.past {
@@ -35,5 +33,12 @@ export const Block = styled(({ className, blockId, status, size }) => {
   }
   &.taken2 {
     background: #f0d319;
+  }
+  @media (prefers-color-scheme: dark) {
+    border-color: white;
+    &.past {
+      background: #444;
+      border-color: #aaa;
+    }
   }
 `;
