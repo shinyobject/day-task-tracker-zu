@@ -12,4 +12,6 @@ export const AddTask = styled(({ className }) => {
   );
 })`
   ${controlButtonStyles}
+  flex-grow: 1;
+  padding: 8px 0;
 `;
