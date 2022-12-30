@@ -62,6 +62,8 @@ export const Main = styled(({ className }) => {
     </div>
   );
 })`
-  margin: 8px;
+  padding: 8px;
   overflow-x: hidden;
+  height: -webkit-fill-available;
+  overflow-y: auto;
 `;
