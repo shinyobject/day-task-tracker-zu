@@ -71,8 +71,8 @@ export const Main = styled(({ className }) => {
   overflow-y: auto;
   h2 {
     margin: 0.5em 0 0.225em 0;
-    font-size: 1rem;
+    font-size: 0.8rem;
     opacity: 0.7;
-    font-weight: 500;
+    font-weight: 700;
   }
 `;
