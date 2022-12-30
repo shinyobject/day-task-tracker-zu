@@ -54,8 +54,11 @@ export const Main = styled(({ className }) => {
   return (
     <div className={className}>
       <Controls isOpen={isOpen} setIsOpen={setIsOpen} />
+      <h2>30 minute blocks</h2>
       <TimeAndBlocks />
+      <h2>Tasks</h2>
       <Tasks />
+      <h2>Time left</h2>
       <FreeBlocks />
       <TaskBars />
       {isOpen && <Settings setIsOpen={setIsOpen} />}
@@ -66,4 +69,10 @@ export const Main = styled(({ className }) => {
   overflow-x: hidden;
   height: -webkit-fill-available;
   overflow-y: auto;
+  h2 {
+    margin: 0.5em 0 0.225em 0;
+    font-size: 1rem;
+    opacity: 0.7;
+    font-weight: 500;
+  }
 `;
