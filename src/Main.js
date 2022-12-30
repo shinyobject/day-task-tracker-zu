@@ -70,7 +70,7 @@ export const Main = styled(({ className }) => {
   height: -webkit-fill-available;
   overflow-y: auto;
   h2 {
-    margin: 0.5em 0 0.225em 0;
+    margin: 1.5em 0 0.225em 0;
     font-size: 0.8rem;
     opacity: 0.7;
     font-weight: 700;
