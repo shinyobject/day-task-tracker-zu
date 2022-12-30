@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Today Tasks",
+  "name": "Today Tasks - budget your free time and manage your most important tasks for today.",
   "icons": [
     {
       "src": "favicon.ico",
