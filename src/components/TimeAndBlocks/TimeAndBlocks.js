@@ -54,4 +54,5 @@ export const TimeAndBlocks = styled(({ className }) => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-bottom: 16px;
 `;
