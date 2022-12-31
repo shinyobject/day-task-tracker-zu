@@ -44,7 +44,10 @@ export const Main = styled(({ className }) => {
       }
     }
   };
-  buildBlocks();
+
+  useEffect(() => {
+    buildBlocks();
+  }, [startHour]);
 
   const interval = setInterval(() => {
     buildBlocks();
