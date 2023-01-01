@@ -17,6 +17,17 @@ export const useBlocks = create(
         set(() => {
           return { blocks: {} };
         }),
+      clearPastBlocks: () =>
+        set((state) => {
+          const noPastBlocks = clone(state.blocks);
+          for (const block in state.blocks) {
+            if (noPastBlocks[block].status === "past") {
+              delete noPastBlocks[block];
+            }
+          }
+
+          return { blocks: noPastBlocks };
+        }),
     }),
     { name: "blocks" }
   )

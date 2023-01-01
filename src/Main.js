@@ -10,9 +10,11 @@ import { TimeAndBlocks } from "components/TimeAndBlocks";
 export const Main = styled(({ className }) => {
   const [isOpen, setIsOpen] = useState(false);
   const setBlock = useBlocks((state) => state.setBlock);
+  const blocks = useBlocks((state) => state.blocks);
   const startHour = useControls((state) => state.startHour);
   const numberOfHours = useControls((state) => state.numberOfHours);
   const clearAllBlocks = useBlocks((state) => state.clearAllBlocks);
+  const clearPastBlocks = useBlocks((state) => state.clearPastBlocks);
   const clearAllTasks = useTasks((state) => state.clearAllTasks);
   const date = useDate((state) => state.date);
   const setDate = useDate((state) => state.setDate);
@@ -24,7 +26,7 @@ export const Main = styled(({ className }) => {
       clearAllTasks();
       setDate(now.getDate());
     }
-  });
+  }, []);
 
   const buildBlocks = () => {
     const currentTime = new Date();
@@ -46,13 +48,13 @@ export const Main = styled(({ className }) => {
   };
 
   useEffect(() => {
+    clearPastBlocks();
     buildBlocks();
-  }, [startHour]);
-
-  const interval = setInterval(() => {
-    buildBlocks();
+    const interval = setInterval(() => {
+      buildBlocks();
+    }, 1000 * 60);
     return () => clearInterval(interval);
-  }, 1000 * 60);
+  }, [startHour]);
 
   return (
     <div className={className}>

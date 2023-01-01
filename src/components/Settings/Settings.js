@@ -28,7 +28,7 @@ export const Settings = styled(({ className, setIsOpen }) => {
   );
   const { use24HourTime, blockSize, startHour, numberOfHours } = controls;
   const setField = useControls((state) => state.setField);
-  const clearAllBlocks = useBlocks((state) => state.clearAllBlocks);
+  const clearPastBlocks = useBlocks((state) => state.clearPastBlocks);
 
   const [form, setForm] = useState({
     use24HourTime,
@@ -50,7 +50,7 @@ export const Settings = styled(({ className, setIsOpen }) => {
     for (const field in form) {
       if (controls[field] !== form[field]) {
         setField(field, form[field]);
-        clearAllBlocks();
+        clearPastBlocks();
       }
     }
     setIsOpen(false);
