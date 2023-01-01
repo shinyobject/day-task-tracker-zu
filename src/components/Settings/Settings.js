@@ -77,6 +77,7 @@ export const Settings = styled(({ className, setIsOpen }) => {
           ref={refs.startHour}
           onFocus={() => refs.startHour.current.select()}
           type="text"
+          pattern="[0-9]*"
           value={form.startHour}
           onChange={(e) => handleForm("startHour", e.target.value)}
         />
@@ -86,6 +87,7 @@ export const Settings = styled(({ className, setIsOpen }) => {
         <input
           ref={refs.numberOfHours}
           onFocus={() => refs.numberOfHours.current.select()}
+          pattern="[0-9]*"
           type="text"
           value={form.numberOfHours}
           onChange={(e) => handleForm("numberOfHours", e.target.value)}
@@ -96,6 +98,7 @@ export const Settings = styled(({ className, setIsOpen }) => {
         <input
           ref={refs.blockSize}
           onFocus={() => refs.blockSize.current.select()}
+          pattern="[0-9]*"
           type="text"
           value={form.blockSize}
           onChange={(e) => handleForm("blockSize", e.target.value)}
