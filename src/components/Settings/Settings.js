@@ -69,7 +69,7 @@ export const Settings = styled(({ className, setIsOpen }) => {
           checked={form.use24HourTime}
           onChange={() => handleForm("use24HourTime", !form.use24HourTime)}
         />
-        <label>use 24 hour time</label>
+        <label>use 24 hour time for timeline</label>
       </Row>
       <Row>
         <span>Start hour</span>
