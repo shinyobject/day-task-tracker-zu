@@ -80,7 +80,7 @@ export const Settings = styled(({ className, setIsOpen }) => {
           pattern="[0-9]*"
           value={form.startHour}
           onChange={(e) => handleForm("startHour", e.target.value)}
-        />
+        /> in 24hr time
       </Row>
       <Row>
         <label>Number of hours</label>
