@@ -56,6 +56,24 @@ export const Main = styled(({ className }) => {
     return () => clearInterval(interval);
   }, [startHour]);
 
+  const timeLeft =
+    numberOfHours * 2 -
+    Object.values(blocks).filter((item) => item.status !== "free").length;
+  let displayTimeLeft;
+  switch (timeLeft) {
+    case 0:
+      displayTimeLeft = "None";
+      break;
+    case 1:
+      displayTimeLeft = "30 min";
+      break;
+    case 2:
+      displayTimeLeft = "1 hour";
+      break;
+    default:
+      displayTimeLeft = `${timeLeft / 2} hours`;
+  }
+
   return (
     <div className={className}>
       <Controls isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -63,7 +81,7 @@ export const Main = styled(({ className }) => {
       <TimeAndBlocks />
       <h2>Tasks</h2>
       <Tasks />
-      <h2>Time left</h2>
+      <h2>Time left: {displayTimeLeft}</h2>
       <FreeBlocks />
       <TaskBars />
       {isOpen && <Settings setIsOpen={setIsOpen} />}
