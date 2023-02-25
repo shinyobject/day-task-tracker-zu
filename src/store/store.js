@@ -79,6 +79,7 @@ export const useControls = create(
     (set) => ({
       use24HourTime: false,
       startHour: 7,
+      endHour: 16,
       numberOfHours: 9,
       blockSize: 25,
       setField: (field, value) =>
