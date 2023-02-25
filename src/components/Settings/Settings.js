@@ -10,11 +10,58 @@ const Row = styled.div`
   align-items: center;
   gap: 4px;
 `;
+const Hours = styled(Row)`
+  select + span {
+    margin-left: 10px;
+  }
+`;
 
 const CloseButton = styled.button`
   ${controlButtonStyles}
   width: fit-content;
 `;
+
+const hoursSource = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+  22, 23,
+];
+const intervalBetweenHours = (startHour, endHour) => {
+  let count = 0;
+  let currentHour = parseInt(startHour);
+  const endHourInt = parseInt(endHour);
+  while (currentHour !== endHourInt) {
+    currentHour = (currentHour + 1) % 24;
+    count = count + 1;
+  }
+  return count;
+};
+const hourOptions = hoursSource.map((hour) => {
+  let displayHour = "";
+
+  switch (hour) {
+    case 0:
+      displayHour = "12 AM";
+      break;
+    case 12:
+      displayHour = "12 PM";
+      break;
+    default:
+      displayHour = `${hour % 12} ${hour < 12 ? "AM" : "PM"}`;
+      break;
+  }
+  return { value: hour, label: displayHour };
+});
+
+const SelectHour = styled(({ className, name, value, onChange }) => (
+  <select className={className} name={name} value={value} onChange={onChange}>
+    {" "}
+    {hourOptions.map((hour, index) => (
+      <option key={`startHour-${index}`} value={hour.value}>
+        {hour.label}
+      </option>
+    ))}
+  </select>
+))``;
 
 export const Settings = styled(({ className, setIsOpen }) => {
   const controls = useControls(
@@ -22,11 +69,13 @@ export const Settings = styled(({ className, setIsOpen }) => {
       use24HourTime: state.use24HourTime,
       blockSize: state.blockSize,
       startHour: state.startHour,
+      endHour: state.endHour,
       numberOfHours: state.numberOfHours,
     }),
     shallow
   );
-  const { use24HourTime, blockSize, startHour, numberOfHours } = controls;
+  const { use24HourTime, blockSize, startHour, endHour, numberOfHours } =
+    controls;
   const setField = useControls((state) => state.setField);
   const clearPastBlocks = useBlocks((state) => state.clearPastBlocks);
 
@@ -34,6 +83,7 @@ export const Settings = styled(({ className, setIsOpen }) => {
     use24HourTime,
     blockSize,
     startHour,
+    endHour,
     numberOfHours,
   });
 
@@ -41,10 +91,20 @@ export const Settings = styled(({ className, setIsOpen }) => {
     blockSize: useRef(),
     numberOfHours: useRef(),
     startHour: useRef(),
+    endHour: useRef(),
   };
 
   const handleForm = (field, value) => {
-    setForm({ ...form, [field]: value });
+    const valueInt = parseInt(value);
+    let interval = form.numberOfHours;
+    if (field === "startHour") {
+      interval = intervalBetweenHours(valueInt, form.endHour);
+    }
+    if (field === "endHour") {
+      interval = intervalBetweenHours(form.startHour, valueInt);
+    }
+
+    setForm({ ...form, [field]: value, numberOfHours: interval });
   };
   const handleClose = () => {
     for (const field in form) {
@@ -71,17 +131,29 @@ export const Settings = styled(({ className, setIsOpen }) => {
         />
         <label>use 24 hour time for timeline</label>
       </Row>
-      <Row>
-        <span>Start hour</span>
-        <input
+      <Hours>
+        <span>Start </span>
+        <SelectHour
+          name="startHour"
+          value={form.startHour}
+          onChange={(e) => handleForm("startHour", e.target.value)}
+        />
+        <span>End </span>
+        <SelectHour
+          name="endHour"
+          value={form.endHour}
+          onChange={(e) => handleForm("endHour", e.target.value)}
+        />
+        {/* <input
           ref={refs.startHour}
           onFocus={() => refs.startHour.current.select()}
           type="text"
           pattern="[0-9]*"
           value={form.startHour}
           onChange={(e) => handleForm("startHour", e.target.value)}
-        /> in 24hr time
-      </Row>
+        />{" "}
+        in 24hr time */}
+      </Hours>
       <Row>
         <label>Number of hours</label>
         <input
