@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useBlocks } from "store";
 
-const statusArray = ["free", "taken1", "taken2"];
+const statusArray = ["free", "taken1", "taken2", "taken3"];
 
 export const Block = styled(({ className, blockId, status, size }) => {
   const setBlock = useBlocks((state) => state.setBlock);
@@ -33,6 +33,9 @@ export const Block = styled(({ className, blockId, status, size }) => {
   }
   &.taken2 {
     background: #f0d319;
+  }
+  &.taken3 {
+    background: #6c95f0;
   }
   @media (prefers-color-scheme: dark) {
     border-color: white;
