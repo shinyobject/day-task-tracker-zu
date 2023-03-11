@@ -61,7 +61,12 @@ const SelectHour = styled(({ className, name, value, onChange }) => (
       </option>
     ))}
   </select>
-))``;
+))`
+  color: black;
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+`;
 
 export const Settings = styled(({ className, setIsOpen }) => {
   const controls = useControls(
@@ -144,15 +149,6 @@ export const Settings = styled(({ className, setIsOpen }) => {
           value={form.endHour}
           onChange={(e) => handleForm("endHour", e.target.value)}
         />
-        {/* <input
-          ref={refs.startHour}
-          onFocus={() => refs.startHour.current.select()}
-          type="text"
-          pattern="[0-9]*"
-          value={form.startHour}
-          onChange={(e) => handleForm("startHour", e.target.value)}
-        />{" "}
-        in 24hr time */}
       </Hours>
       <Row>
         <label>Number of hours</label>
