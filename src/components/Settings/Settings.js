@@ -11,6 +11,9 @@ const Row = styled.div`
   gap: 4px;
 `;
 const Hours = styled(Row)`
+  display: flex;
+  gap: 8px;
+  align-items: center;
   select + span {
     margin-left: 10px;
   }
@@ -62,6 +65,8 @@ const SelectHour = styled(({ className, name, value, onChange }) => (
     ))}
   </select>
 ))`
+  font-size: 1rem;
+  margin-bottom: -3px;
   color: black;
   @media (prefers-color-scheme: dark) {
     color: white;
@@ -137,13 +142,13 @@ export const Settings = styled(({ className, setIsOpen }) => {
         <label>use 24 hour time for timeline</label>
       </Row>
       <Hours>
-        <span>Start </span>
+        <div>Start </div>
         <SelectHour
           name="startHour"
           value={form.startHour}
           onChange={(e) => handleForm("startHour", e.target.value)}
         />
-        <span>End </span>
+        <div>End </div>
         <SelectHour
           name="endHour"
           value={form.endHour}
@@ -193,6 +198,9 @@ export const Settings = styled(({ className, setIsOpen }) => {
   left: 0;
   right: 0;
   background: white;
+  input[type="text"] {
+    font-size: 1rem;
+  }
   @media (prefers-color-scheme: dark) {
     background: black;
     color: white;
