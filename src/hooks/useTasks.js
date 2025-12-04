@@ -22,15 +22,24 @@ export const useTasks = () => {
     [dispatch]
   );
 
+  const reorderTasks = useCallback(
+    (newOrder) => {
+      dispatch({ type: "REORDER_TASKS", payload: newOrder });
+    },
+    [dispatch]
+  );
+
   const clearAllTasks = useCallback(() => {
     dispatch({ type: "CLEAR_ALL_TASKS" });
   }, [dispatch]);
 
   return {
     tasks: state.tasks,
+    taskOrder: state.taskOrder,
     setTask,
     newTask,
     removeTask,
+    reorderTasks,
     clearAllTasks,
   };
 };

@@ -182,10 +182,40 @@ const Task = ({ task, lastTask, className }) => {
 
 // Main TaskList component
 export const TaskList = ({ isAddButton = false }) => {
-  const { tasks, newTask } = useTasks();
-  const taskArray = Object.entries(tasks).map((item) => ({
-    ...item[1],
-  }));
+  const { tasks, taskOrder, newTask, reorderTasks } = useTasks();
+  const [draggedIndex, setDraggedIndex] = useState(null);
+
+  // Create ordered task array based on taskOrder
+  const orderedTaskIds = taskOrder.filter((id) => tasks[id]); // Filter out deleted tasks
+  const taskArray = orderedTaskIds.map((id) => tasks[id]);
+
+  // Handle drag start
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", e.currentTarget);
+  };
+
+  // Handle drag over
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    // Reorder the array
+    const newOrder = [...orderedTaskIds];
+    const draggedItem = newOrder[draggedIndex];
+    newOrder.splice(draggedIndex, 1);
+    newOrder.splice(index, 0, draggedItem);
+
+    reorderTasks(newOrder);
+    setDraggedIndex(index);
+  };
+
+  // Handle drag end
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+  };
 
   // If this is the add button mode, just render the add button
   if (isAddButton) {
@@ -215,12 +245,25 @@ export const TaskList = ({ isAddButton = false }) => {
         const doneClassName = task.done === true ? "done" : "";
 
         return (
-          <Task
-            className={doneClassName}
+          <div
             key={`Task-${task.taskId}`}
-            task={task}
-            lastTask={index === taskArray.length - 1}
-          />
+            draggable
+            onDragStart={(e) => handleDragStart(e, index)}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDragEnd={handleDragEnd}
+            className={css({
+              cursor: "grab",
+              "&:active": {
+                cursor: "grabbing"
+              }
+            })}
+          >
+            <Task
+              className={doneClassName}
+              task={task}
+              lastTask={index === taskArray.length - 1}
+            />
+          </div>
         );
       })}
     </div>

@@ -15,6 +15,7 @@ const getInitialState = () => {
   return {
     blocks: {},
     tasks: {},
+    taskOrder: [], // Array of taskIds in display order
     settings: {
       use24HourTime: false,
       startHour: 7,
@@ -74,16 +75,24 @@ const appReducer = (state, action) => {
             length: 1,
           },
         },
+        taskOrder: [...state.taskOrder, id], // Add new task to end of order
       };
     }
 
     case "REMOVE_TASK": {
       const { [action.payload]: removed, ...remainingTasks } = state.tasks;
-      return { ...state, tasks: remainingTasks };
+      return {
+        ...state,
+        tasks: remainingTasks,
+        taskOrder: state.taskOrder.filter((id) => id !== action.payload), // Remove from order
+      };
     }
 
+    case "REORDER_TASKS":
+      return { ...state, taskOrder: action.payload };
+
     case "CLEAR_ALL_TASKS":
-      return { ...state, tasks: {} };
+      return { ...state, tasks: {}, taskOrder: [] };
 
     // Settings actions
     case "UPDATE_SETTING":
