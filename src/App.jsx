@@ -1,10 +1,11 @@
-import { Main } from "./Main.jsx";
+import { AppProvider } from "./context/AppContext";
+import { TaskTracker } from "./components/TaskTracker";
 
 function App() {
   return (
-    <div className="App">
-      <Main />
-    </div>
+    <AppProvider>
+      <TaskTracker />
+    </AppProvider>
   );
 }
 

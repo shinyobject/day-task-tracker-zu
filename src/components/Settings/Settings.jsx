@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import { shallow } from "zustand/shallow";
 import { css } from "styled-system/css";
-import { useControls, useBlocks } from "store";
-import { ClearAll } from "./ClearAll";
+import { useSettings } from "../../hooks/useSettings";
+import { useBlocks } from "../../hooks/useBlocks";
+import { useTasks } from "../../hooks/useTasks";
 
 const hoursSource = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
@@ -59,20 +59,10 @@ const SelectHour = ({ name, value, onChange }) => (
 );
 
 export const Settings = ({ setIsOpen }) => {
-  const controls = useControls(
-    (state) => ({
-      use24HourTime: state.use24HourTime,
-      blockSize: state.blockSize,
-      startHour: state.startHour,
-      endHour: state.endHour,
-      numberOfHours: state.numberOfHours,
-    }),
-    shallow
-  );
-  const { use24HourTime, blockSize, startHour, endHour, numberOfHours } =
-    controls;
-  const setField = useControls((state) => state.setField);
-  const clearPastBlocks = useBlocks((state) => state.clearPastBlocks);
+  const { settings, updateSettings } = useSettings();
+  const { use24HourTime, blockSize, startHour, endHour, numberOfHours } = settings;
+  const { clearPastBlocks, clearAllBlocks } = useBlocks();
+  const { clearAllTasks } = useTasks();
 
   const [form, setForm] = useState({
     use24HourTime,
@@ -101,12 +91,22 @@ export const Settings = ({ setIsOpen }) => {
 
     setForm({ ...form, [field]: value, numberOfHours: interval });
   };
+  const handleClearAll = () => {
+    clearAllTasks();
+    clearAllBlocks();
+  };
+
   const handleClose = () => {
+    let hasChanges = false;
     for (const field in form) {
-      if (controls[field] !== form[field]) {
-        setField(field, form[field]);
-        clearPastBlocks();
+      if (settings[field] !== form[field]) {
+        hasChanges = true;
+        break;
       }
+    }
+    if (hasChanges) {
+      updateSettings(form);
+      clearPastBlocks();
     }
     setIsOpen(false);
   };
@@ -143,7 +143,21 @@ export const Settings = ({ setIsOpen }) => {
         alignItems: "center",
         gap: "4px"
       })}>
-        Clear all task and block data <ClearAll />
+        Clear all task and block data{" "}
+        <button
+          className={css({
+            padding: "4px 8px",
+            background: "#109aed",
+            color: "white",
+            fontSize: "14px",
+            fontWeight: 600,
+            border: 0,
+            borderRadius: "4px"
+          })}
+          onClick={handleClearAll}
+        >
+          Clear All
+        </button>
       </div>
       <div className={css({
         display: "flex",

@@ -1,0 +1,227 @@
+import { useRef, useState, forwardRef } from "react";
+import { css, cx } from "styled-system/css";
+import { useTasks } from "../hooks/useTasks";
+
+// DoneToggle component
+const DoneToggle = (props) => {
+  return (
+    <input
+      type="checkbox"
+      className={css({
+        border: "1px solid black",
+        "@media (prefers-color-scheme: dark)": {
+          borderColor: "white"
+        }
+      })}
+      {...props}
+    />
+  );
+};
+
+// TaskName component
+const TaskName = forwardRef((props, ref) => {
+  return (
+    <input
+      ref={ref}
+      className={css({
+        border: "1px solid transparent",
+        padding: "2px 8px",
+        background: "transparent",
+        fontSize: "16px",
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: "100%",
+        "&:hover": {
+          cursor: "pointer"
+        },
+        "&:hover:focus": {
+          cursor: "text"
+        },
+        ".done &:focus, &:focus": {
+          background: "#fff",
+          outline: "none",
+          color: "#000",
+          borderColor: "#ccc"
+        }
+      })}
+      {...props}
+    />
+  );
+});
+
+// TaskLength component
+const TaskLength = forwardRef((props, ref) => {
+  return (
+    <input
+      ref={ref}
+      pattern="[0-9]*"
+      className={css({
+        border: "1px solid transparent",
+        padding: "2px 8px",
+        background: "transparent",
+        fontSize: "16px",
+        flexShrink: 1,
+        flexGrow: 1,
+        flexBasis: "2ch",
+        width: "2ch",
+        "&:hover": {
+          cursor: "pointer"
+        },
+        "&:hover:focus": {
+          cursor: "text"
+        },
+        ".done &:focus, &:focus": {
+          background: "#fff",
+          outline: "none",
+          color: "#000",
+          borderColor: "#ccc"
+        }
+      })}
+      {...props}
+    />
+  );
+});
+
+// RemoveTask component
+const RemoveTask = (props) => {
+  return (
+    <button
+      className={css({
+        border: 0,
+        background: "transparent",
+        fontSize: "18px",
+        flexBasis: "2ch",
+        textAlign: "right"
+      })}
+      {...props}
+    />
+  );
+};
+
+// Task component
+const Task = ({ task, lastTask, className }) => {
+  const [internalName, setInternalName] = useState(task.name);
+  const [internalLength, setInternalLength] = useState(task.length);
+  const nameRef = useRef();
+  const lengthRef = useRef();
+
+  const { newTask, setTask, removeTask } = useTasks();
+
+  const handleDone = () => {
+    setTask({ ...task, done: !task.done });
+  };
+
+  const handleNameChange = () => {
+    setTask({ ...task, name: internalName });
+  };
+
+  const handleLengthChange = () => {
+    setTask({ ...task, length: internalLength });
+  };
+
+  const handleLastTaskTab = (e) => {
+    if (e.key.toLowerCase() === "tab" && lastTask === true) {
+      newTask();
+    }
+    if (e.key.toLowerCase() === "enter") {
+      handleLengthChange();
+      lengthRef.current.blur();
+    }
+  };
+
+  const handleRemoveTask = () => {
+    removeTask(task.taskId);
+  };
+
+  const handleKeyDownName = (e) => {
+    if (e.key.toLowerCase() === "enter") {
+      lengthRef.current.focus();
+    }
+  };
+
+  return (
+    <div className={cx(
+      className,
+      css({
+        display: "flex",
+        gap: "8px",
+        alignItems: "center",
+        justifyContent: "space-between",
+        position: "relative",
+        "& label": {
+          flexGrow: 0,
+          flexShrink: 0,
+          width: "10px"
+        }
+      })
+    )}>
+      <label>
+        <DoneToggle checked={task.done} onChange={handleDone} />
+      </label>
+      <TaskName
+        ref={nameRef}
+        onFocus={() => nameRef.current.select()}
+        value={internalName}
+        onChange={(e) => setInternalName(e.target.value)}
+        onBlur={handleNameChange}
+        onKeyDown={handleKeyDownName}
+      />
+      <TaskLength
+        ref={lengthRef}
+        onFocus={() => lengthRef.current.select()}
+        value={internalLength}
+        onChange={(e) => setInternalLength(e.target.value)}
+        onBlur={handleLengthChange}
+        onKeyDown={handleLastTaskTab}
+      />
+      <RemoveTask onClick={handleRemoveTask}>&#xd7;</RemoveTask>
+    </div>
+  );
+};
+
+// Main TaskList component
+export const TaskList = ({ isAddButton = false }) => {
+  const { tasks, newTask } = useTasks();
+  const taskArray = Object.entries(tasks).map((item) => ({
+    ...item[1],
+  }));
+
+  // If this is the add button mode, just render the add button
+  if (isAddButton) {
+    return (
+      <button
+        className={css({
+          padding: "8px 0",
+          background: "#109aed",
+          color: "white",
+          fontSize: "14px",
+          fontWeight: 600,
+          border: 0,
+          borderRadius: "4px",
+          flexGrow: 1
+        })}
+        onClick={newTask}
+      >
+        Add Task
+      </button>
+    );
+  }
+
+  // Otherwise render the task list
+  return (
+    <div className={css({ margin: 0 })}>
+      {taskArray.map((task, index) => {
+        const doneClassName = task.done === true ? "done" : "";
+
+        return (
+          <Task
+            className={doneClassName}
+            key={`Task-${task.taskId}`}
+            task={task}
+            lastTask={index === taskArray.length - 1}
+          />
+        );
+      })}
+    </div>
+  );
+};

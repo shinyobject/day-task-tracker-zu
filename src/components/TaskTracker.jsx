@@ -1,33 +1,18 @@
 import { useEffect, useState } from "react";
 import { css } from "styled-system/css";
-import { Controls } from "components/Controls";
-import { FreeBlocks } from "components/Blocks";
-import { Tasks, TaskBars } from "components/Tasks";
-import { useBlocks, useControls, useTasks, useDate } from "store";
-import { Settings } from "components/Settings";
-import { TimeAndBlocks } from "components/TimeAndBlocks";
+import { useBlocks } from "../hooks/useBlocks";
+import { useSettings } from "../hooks/useSettings";
+import { TaskList } from "./TaskList";
+import { TimeBlocks } from "./TimeBlocks";
+import { Settings } from "./Settings/Settings";
 
-export const Main = () => {
+export const TaskTracker = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const setBlock = useBlocks((state) => state.setBlock);
-  const blocks = useBlocks((state) => state.blocks);
-  const startHour = useControls((state) => state.startHour);
-  const numberOfHours = useControls((state) => state.numberOfHours);
-  const clearAllBlocks = useBlocks((state) => state.clearAllBlocks);
-  const clearPastBlocks = useBlocks((state) => state.clearPastBlocks);
-  const clearAllTasks = useTasks((state) => state.clearAllTasks);
-  const date = useDate((state) => state.date);
-  const setDate = useDate((state) => state.setDate);
+  const { blocks, setBlock, clearPastBlocks } = useBlocks();
+  const { settings } = useSettings();
+  const { startHour, numberOfHours } = settings;
 
-  useEffect(() => {
-    const now = new Date();
-    if (now.getDate() !== date) {
-      clearAllBlocks();
-      clearAllTasks();
-      setDate(now.getDate());
-    }
-  }, []);
-
+  // Build blocks based on current time
   const buildBlocks = () => {
     const currentTime = new Date();
     const hours = currentTime.getHours();
@@ -47,6 +32,7 @@ export const Main = () => {
     }
   };
 
+  // Update past blocks periodically
   useEffect(() => {
     clearPastBlocks();
     buildBlocks();
@@ -54,11 +40,14 @@ export const Main = () => {
       buildBlocks();
     }, 1000 * 60);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startHour]);
 
+  // Calculate time left
   const timeLeft =
     numberOfHours * 2 -
     Object.values(blocks).filter((item) => item.status !== "free").length;
+
   let displayTimeLeft;
   switch (timeLeft) {
     case 0:
@@ -87,14 +76,34 @@ export const Main = () => {
         fontWeight: 700
       }
     })}>
-      <Controls isOpen={isOpen} setIsOpen={setIsOpen} />
+      <div className={css({
+        display: "flex",
+        justifyContent: "space-between",
+        gap: "8px",
+        marginBottom: "16px"
+      })}>
+        <TaskList isAddButton={true} />
+        <button
+          className={css({
+            border: 0,
+            background: "transparent"
+          })}
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          Settings
+        </button>
+      </div>
+
       <h2>30 minute blocks</h2>
-      <TimeAndBlocks />
+      <TimeBlocks />
+
       <h2>Tasks</h2>
-      <Tasks />
+      <TaskList />
+
       <h2>Time left: {displayTimeLeft}</h2>
-      <FreeBlocks />
-      <TaskBars />
+      <TimeBlocks showFreeBlocks={true} />
+      <TimeBlocks showTaskBars={true} />
+
       {isOpen && <Settings setIsOpen={setIsOpen} />}
     </div>
   );
