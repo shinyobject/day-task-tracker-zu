@@ -6,7 +6,14 @@ const getInitialState = () => {
   const stored = localStorage.getItem("app-state");
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const state = JSON.parse(stored);
+
+      // Migration: Initialize taskOrder if it doesn't exist
+      if (!state.taskOrder && state.tasks) {
+        state.taskOrder = Object.keys(state.tasks);
+      }
+
+      return state;
     } catch (e) {
       console.error("Failed to parse stored state:", e);
     }

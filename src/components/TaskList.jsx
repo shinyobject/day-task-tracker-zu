@@ -186,7 +186,11 @@ export const TaskList = ({ isAddButton = false }) => {
   const [draggedIndex, setDraggedIndex] = useState(null);
 
   // Create ordered task array based on taskOrder
-  const orderedTaskIds = taskOrder.filter((id) => tasks[id]); // Filter out deleted tasks
+  // If taskOrder is empty/undefined, use existing task IDs as order
+  const currentTaskIds = Object.keys(tasks);
+  const orderedTaskIds = (taskOrder && taskOrder.length > 0)
+    ? taskOrder.filter((id) => tasks[id]) // Filter out deleted tasks
+    : currentTaskIds; // Fallback for legacy data
   const taskArray = orderedTaskIds.map((id) => tasks[id]);
 
   // Handle drag start
