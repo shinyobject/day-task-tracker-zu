@@ -99,8 +99,38 @@ const RemoveTask = (props) => {
   );
 };
 
+// Drag handle component
+const DragHandle = forwardRef((props, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={css({
+        cursor: "grab",
+        padding: "4px",
+        display: "flex",
+        alignItems: "center",
+        fontSize: "16px",
+        color: "#999",
+        userSelect: "none",
+        "&:active": {
+          cursor: "grabbing"
+        },
+        "&:hover": {
+          color: "#333",
+          "@media (prefers-color-scheme: dark)": {
+            color: "#ccc"
+          }
+        }
+      })}
+      {...props}
+    >
+      ⋮⋮
+    </div>
+  );
+});
+
 // Task component
-const Task = ({ task, lastTask, className }) => {
+const Task = ({ task, lastTask, className, dragHandleProps }) => {
   const [internalName, setInternalName] = useState(task.name);
   const [internalLength, setInternalLength] = useState(task.length);
   const nameRef = useRef();
@@ -156,6 +186,7 @@ const Task = ({ task, lastTask, className }) => {
         }
       })
     )}>
+      <DragHandle {...dragHandleProps} />
       <label>
         <DoneToggle checked={task.done} onChange={handleDone} />
       </label>
@@ -251,21 +282,17 @@ export const TaskList = ({ isAddButton = false }) => {
         return (
           <div
             key={`Task-${task.taskId}`}
-            draggable
-            onDragStart={(e) => handleDragStart(e, index)}
             onDragOver={(e) => handleDragOver(e, index)}
-            onDragEnd={handleDragEnd}
-            className={css({
-              cursor: "grab",
-              "&:active": {
-                cursor: "grabbing"
-              }
-            })}
           >
             <Task
               className={doneClassName}
               task={task}
               lastTask={index === taskArray.length - 1}
+              dragHandleProps={{
+                draggable: true,
+                onDragStart: (e) => handleDragStart(e, index),
+                onDragEnd: handleDragEnd
+              }}
             />
           </div>
         );
