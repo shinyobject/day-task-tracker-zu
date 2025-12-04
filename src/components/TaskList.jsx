@@ -62,8 +62,9 @@ const TaskLength = forwardRef((props, ref) => {
         fontSize: "16px",
         flexShrink: 1,
         flexGrow: 1,
-        flexBasis: "2ch",
-        width: "2ch",
+        flexBasis: "5ch",
+        textAlign: "right",
+        width: "5ch",
         "&:hover": {
           cursor: "pointer"
         },

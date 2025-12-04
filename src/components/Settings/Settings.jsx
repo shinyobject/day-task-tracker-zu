@@ -221,6 +221,9 @@ export const Settings = ({ setIsOpen }) => {
           type="text"
           value={form.blockSize}
           onChange={(e) => handleForm("blockSize", e.target.value)}
+          className={css({
+            width: "5ch !important"
+          })}
         />
       </div>
       <button
