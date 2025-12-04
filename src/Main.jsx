@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
+import { css } from "styled-system/css";
 import { Controls } from "components/Controls";
 import { FreeBlocks } from "components/Blocks";
 import { Tasks, TaskBars } from "components/Tasks";
@@ -7,7 +7,7 @@ import { useBlocks, useControls, useTasks, useDate } from "store";
 import { Settings } from "components/Settings";
 import { TimeAndBlocks } from "components/TimeAndBlocks";
 
-export const Main = styled(({ className }) => {
+export const Main = () => {
   const [isOpen, setIsOpen] = useState(false);
   const setBlock = useBlocks((state) => state.setBlock);
   const blocks = useBlocks((state) => state.blocks);
@@ -75,7 +75,18 @@ export const Main = styled(({ className }) => {
   }
 
   return (
-    <div className={className}>
+    <div className={css({
+      padding: "8px",
+      overflowX: "hidden",
+      height: "-webkit-fill-available",
+      overflowY: "auto",
+      "& h2": {
+        margin: "1.5em 0 0.225em 0",
+        fontSize: "0.8rem",
+        opacity: 0.7,
+        fontWeight: 700
+      }
+    })}>
       <Controls isOpen={isOpen} setIsOpen={setIsOpen} />
       <h2>30 minute blocks</h2>
       <TimeAndBlocks />
@@ -87,15 +98,4 @@ export const Main = styled(({ className }) => {
       {isOpen && <Settings setIsOpen={setIsOpen} />}
     </div>
   );
-})`
-  padding: 8px;
-  overflow-x: hidden;
-  height: -webkit-fill-available;
-  overflow-y: auto;
-  h2 {
-    margin: 1.5em 0 0.225em 0;
-    font-size: 0.8rem;
-    opacity: 0.7;
-    font-weight: 700;
-  }
-`;
+};

@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import shallow from "zustand/shallow";
+import { css } from "styled-system/css";
+import { shallow } from "zustand/shallow";
 import { useBlocks, useControls } from "store";
 import { Block } from "components/Blocks";
 
-export const Blocks = styled(({ className }) => {
+export const Blocks = () => {
   const { numberOfHours, startHour, blockSize } = useControls(
     (state) => ({
       numberOfHours: state.numberOfHours,
@@ -29,8 +29,12 @@ export const Blocks = styled(({ className }) => {
     );
   });
 
-  return <div className={className}>{blocksArray}</div>;
-})`
-  display: flex;
-  gap: 8px;
-`;
+  return (
+    <div className={css({
+      display: "flex",
+      gap: "8px"
+    })}>
+      {blocksArray}
+    </div>
+  );
+};

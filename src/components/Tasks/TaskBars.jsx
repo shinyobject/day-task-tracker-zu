@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import styled from "styled-components";
+import { css } from "styled-system/css";
 import { TaskBar } from "./Taskbar";
 import { useBlocks, useControls, useTasks } from "store";
 
-export const TaskBars = styled(({ className }) => {
+export const TaskBars = () => {
   let timeUsed = 0;
   const blockSize = useControls((state) => state.blockSize);
   const numberOfHours = useControls((state) => state.numberOfHours);
@@ -27,7 +27,12 @@ export const TaskBars = styled(({ className }) => {
   }, [tasks]);
 
   return (
-    <div className={className}>
+    <div className={css({
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "8px",
+      marginTop: "8px"
+    })}>
       {tasksToDo.map((task, index) => {
         const hasEnoughTimeLeft = task.length * 1 <= timeLeft - timeUsed;
         timeUsed += task.length * 1;
@@ -42,9 +47,4 @@ export const TaskBars = styled(({ className }) => {
       })}
     </div>
   );
-})`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-`;
+};

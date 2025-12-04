@@ -1,28 +1,8 @@
 import { useRef, useState } from "react";
-import shallow from "zustand/shallow";
-import styled from "styled-components";
+import { shallow } from "zustand/shallow";
+import { css } from "styled-system/css";
 import { useControls, useBlocks } from "store";
 import { ClearAll } from "./ClearAll";
-import { controlButtonStyles } from "styles/controlButtonStyles";
-
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
-const Hours = styled(Row)`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  select + span {
-    margin-left: 10px;
-  }
-`;
-
-const CloseButton = styled.button`
-  ${controlButtonStyles}
-  width: fit-content;
-`;
 
 const hoursSource = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
@@ -55,8 +35,20 @@ const hourOptions = hoursSource.map((hour) => {
   return { value: hour, label: displayHour };
 });
 
-const SelectHour = styled(({ className, name, value, onChange }) => (
-  <select className={className} name={name} value={value} onChange={onChange}>
+const SelectHour = ({ name, value, onChange }) => (
+  <select
+    className={css({
+      fontSize: "1rem",
+      marginBottom: "-3px",
+      color: "black",
+      "@media (prefers-color-scheme: dark)": {
+        color: "white"
+      }
+    })}
+    name={name}
+    value={value}
+    onChange={onChange}
+  >
     {" "}
     {hourOptions.map((hour, index) => (
       <option key={`startHour-${index}`} value={hour.value}>
@@ -64,16 +56,9 @@ const SelectHour = styled(({ className, name, value, onChange }) => (
       </option>
     ))}
   </select>
-))`
-  font-size: 1rem;
-  margin-bottom: -3px;
-  color: black;
-  @media (prefers-color-scheme: dark) {
-    color: white;
-  }
-`;
+);
 
-export const Settings = styled(({ className, setIsOpen }) => {
+export const Settings = ({ setIsOpen }) => {
   const controls = useControls(
     (state) => ({
       use24HourTime: state.use24HourTime,
@@ -127,12 +112,44 @@ export const Settings = styled(({ className, setIsOpen }) => {
   };
 
   return (
-    <div className={className}>
+    <div className={css({
+      padding: "16px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "8px",
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      background: "white",
+      zIndex: 10,
+      "& input[type='text']": {
+        width: "3ch",
+        fontSize: "1rem"
+      },
+      "& h2": {
+        marginTop: 0,
+        marginBottom: "10px"
+      },
+      "@media (prefers-color-scheme: dark)": {
+        background: "black",
+        color: "white"
+      }
+    })}>
       <h2>Settings</h2>
-      <Row>
+      <div className={css({
+        display: "flex",
+        alignItems: "center",
+        gap: "4px"
+      })}>
         Clear all task and block data <ClearAll />
-      </Row>
-      <Row>
+      </div>
+      <div className={css({
+        display: "flex",
+        alignItems: "center",
+        gap: "4px"
+      })}>
         <input
           type="checkbox"
           value={form.use24HourTime}
@@ -140,8 +157,15 @@ export const Settings = styled(({ className, setIsOpen }) => {
           onChange={() => handleForm("use24HourTime", !form.use24HourTime)}
         />
         <label>use 24 hour time for timeline</label>
-      </Row>
-      <Hours>
+      </div>
+      <div className={css({
+        display: "flex",
+        gap: "8px",
+        alignItems: "center",
+        "& select + span": {
+          marginLeft: "10px"
+        }
+      })}>
         <div>Start </div>
         <SelectHour
           name="startHour"
@@ -154,8 +178,12 @@ export const Settings = styled(({ className, setIsOpen }) => {
           value={form.endHour}
           onChange={(e) => handleForm("endHour", e.target.value)}
         />
-      </Hours>
-      <Row>
+      </div>
+      <div className={css({
+        display: "flex",
+        alignItems: "center",
+        gap: "4px"
+      })}>
         <label>Number of hours</label>
         <input
           ref={refs.numberOfHours}
@@ -165,8 +193,12 @@ export const Settings = styled(({ className, setIsOpen }) => {
           value={form.numberOfHours}
           onChange={(e) => handleForm("numberOfHours", e.target.value)}
         />
-      </Row>
-      <Row>
+      </div>
+      <div className={css({
+        display: "flex",
+        alignItems: "center",
+        gap: "4px"
+      })}>
         <label>Block size</label>
         <input
           ref={refs.blockSize}
@@ -176,34 +208,22 @@ export const Settings = styled(({ className, setIsOpen }) => {
           value={form.blockSize}
           onChange={(e) => handleForm("blockSize", e.target.value)}
         />
-      </Row>
-      <CloseButton onClick={handleClose}>Close</CloseButton>
+      </div>
+      <button
+        className={css({
+          padding: "4px 8px",
+          background: "#109aed",
+          color: "white",
+          fontSize: "14px",
+          fontWeight: 600,
+          border: 0,
+          borderRadius: "4px",
+          width: "fit-content"
+        })}
+        onClick={handleClose}
+      >
+        Close
+      </button>
     </div>
   );
-})`
-  input[type="text"] {
-    width: 3ch;
-  }
-  h2 {
-    margin-top: 0;
-    margin-bottom: 10px;
-  }
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  input[type="text"] {
-    font-size: 1rem;
-  }
-  @media (prefers-color-scheme: dark) {
-    background: black;
-    color: white;
-  }
-  z-index: 10;
-`;
+};

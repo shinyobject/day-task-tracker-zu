@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
-import styled from "styled-components";
+import { css } from "styled-system/css";
 import { DoneToggle } from "./DoneToggle";
 import { TaskName } from "./TaskName";
 import { TaskLength } from "./TaskLength";
 import { RemoveTask } from "./RemoveTask";
 import { useTasks } from "store";
 
-export const Task = styled(({ className, task, lastTask }) => {
+export const Task = ({ task, lastTask }) => {
   const [internalName, setInternalName] = useState(task.name);
   const [internalLength, setInternalLength] = useState(task.length);
   const nameRef = useRef();
@@ -43,7 +43,18 @@ export const Task = styled(({ className, task, lastTask }) => {
   };
 
   return (
-    <div className={className}>
+    <div className={css({
+      display: "flex",
+      gap: "8px",
+      alignItems: "center",
+      justifyContent: "space-between",
+      position: "relative",
+      "& label": {
+        flexGrow: 0,
+        flexShrink: 0,
+        width: "10px"
+      }
+    })}>
       <label>
         <DoneToggle checked={task.done} onChange={handleDone} />
       </label>
@@ -66,38 +77,4 @@ export const Task = styled(({ className, task, lastTask }) => {
       <RemoveTask onClick={handleRemoveTask}>&#xd7;</RemoveTask>
     </div>
   );
-})`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  &.done {
-    background: #cdffa0;
-    @media (prefers-color-scheme: dark) {
-      background: darkgreen;
-    }
-  }
-  justify-content: space-between;
-
-  position: relative;
-  ${RemoveTask}:hover {
-    background: red;
-    color: white;
-    border-radius: 4px;
-  }
-  ${RemoveTask}:hover::after {
-    content: "";
-    cursor: pointer;
-    background: #ff000020;
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-  label {
-    flex-grow: 0;
-    flex-shrink: 0;
-    width: 10px;
-  }
-`;
+};

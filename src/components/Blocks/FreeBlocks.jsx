@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import { css } from "styled-system/css";
 import { FreeBlock } from "./FreeBlock";
 import { useControls, useBlocks } from "store";
 
-export const FreeBlocks = styled(({ className }) => {
+export const FreeBlocks = () => {
   const blockSize = useControls((state) => state.blockSize);
   const numberOfHours = useControls((state) => state.numberOfHours);
   const startHour = useControls((state) => state.startHour);
@@ -20,14 +20,14 @@ export const FreeBlocks = styled(({ className }) => {
 
   if (usedTime >= numberOfHours * 2) return;
   return (
-    <div className={className}>
+    <div className={css({
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "8px"
+    })}>
       {[...Array(numberOfHours * 2 - usedTime)].map((item, index) => (
         <FreeBlock key={`FreeBlock-${index}`} size={blockSize - 2} />
       ))}
     </div>
   );
-})`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-`;
+};

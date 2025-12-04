@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
-    "module": "commonjs",
-    "target": "es6"
+    "module": "esnext",
+    "target": "es6",
+    "paths": {
+      "components/*": ["./components/*"],
+      "store/*": ["./store/*"],
+      "styles/*": ["./styles/*"],
+      "utils/*": ["./utils/*"]
+    }
   },
   "include": ["src"],
-  "paths": {},
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "styled-system"]
 }

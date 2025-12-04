@@ -1,37 +1,7 @@
-import create from "zustand";
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { clone } from "utils/clone";
+import { immer } from "zustand/middleware/immer";
 import { uuid } from "utils/uuid";
-
-export const useBlocks = create(
-  persist(
-    (set) => ({
-      blocks: {},
-      setBlock: (value) =>
-        set((state) => {
-          const newBlocks = clone(state.blocks);
-          newBlocks[value.blockId] = value;
-          return { blocks: newBlocks };
-        }),
-      clearAllBlocks: () =>
-        set(() => {
-          return { blocks: {} };
-        }),
-      clearPastBlocks: () =>
-        set((state) => {
-          const noPastBlocks = clone(state.blocks);
-          for (const block in state.blocks) {
-            if (noPastBlocks[block].status === "past") {
-              delete noPastBlocks[block];
-            }
-          }
-
-          return { blocks: noPastBlocks };
-        }),
-    }),
-    { name: "blocks" }
-  )
-);
 
 const initialTask = () => {
   const id = uuid();
@@ -46,58 +16,120 @@ const initialTask = () => {
   };
 };
 
-export const useTasks = create(
+const today = new Date();
+
+// Combined store using Immer for immutable updates
+export const useStore = create(
   persist(
-    (set) => ({
+    immer((set) => ({
+      // Blocks state
+      blocks: {},
+      setBlock: (value) =>
+        set((state) => {
+          state.blocks[value.blockId] = value;
+        }),
+      clearAllBlocks: () =>
+        set((state) => {
+          state.blocks = {};
+        }),
+      clearPastBlocks: () =>
+        set((state) => {
+          Object.keys(state.blocks).forEach((blockId) => {
+            if (state.blocks[blockId].status === "past") {
+              delete state.blocks[blockId];
+            }
+          });
+        }),
+
+      // Tasks state
       tasks: {},
       setTask: (value) =>
         set((state) => {
-          const newTasks = clone(state.tasks);
-          newTasks[value.taskId] = value;
-          return { tasks: newTasks };
+          state.tasks[value.taskId] = value;
         }),
       newTask: () =>
         set((state) => {
-          const currentTasks = clone(state.tasks);
           const newTask = initialTask();
-          return { tasks: { ...currentTasks, ...newTask } };
+          Object.assign(state.tasks, newTask);
         }),
       removeTask: (taskId) =>
         set((state) => {
-          const newTasks = clone(state.tasks);
-          delete newTasks[taskId];
-          return { tasks: newTasks };
+          delete state.tasks[taskId];
         }),
-      clearAllTasks: () => set((state) => ({ tasks: {} })),
-    }),
-    { name: "tasks" }
-  )
-);
+      clearAllTasks: () =>
+        set((state) => {
+          state.tasks = {};
+        }),
 
-export const useControls = create(
-  persist(
-    (set) => ({
+      // Controls state
       use24HourTime: false,
       startHour: 7,
       endHour: 16,
       numberOfHours: 9,
       blockSize: 25,
       setField: (field, value) =>
-        set((state) => ({
-          [field]: value,
-        })),
-    }),
-    { name: "controls" }
+        set((state) => {
+          state[field] = value;
+        }),
+
+      // Date state
+      date: today.getDate(),
+      setDate: (day) =>
+        set((state) => {
+          state.date = day;
+        }),
+    })),
+    { name: "app-store" }
   )
 );
 
-const today = new Date();
-export const useDate = create(
-  persist(
-    (set) => ({
-      date: today.getDate(),
-      setDate: (day) => set((state) => ({ date: day })),
-    }),
-    { name: "date" }
-  )
-);
+// Backward compatibility exports - selector functions
+export const useBlocks = (selector) => useStore((state) => selector ? selector({
+  blocks: state.blocks,
+  setBlock: state.setBlock,
+  clearAllBlocks: state.clearAllBlocks,
+  clearPastBlocks: state.clearPastBlocks,
+}) : {
+  blocks: state.blocks,
+  setBlock: state.setBlock,
+  clearAllBlocks: state.clearAllBlocks,
+  clearPastBlocks: state.clearPastBlocks,
+});
+
+export const useTasks = (selector) => useStore((state) => selector ? selector({
+  tasks: state.tasks,
+  setTask: state.setTask,
+  newTask: state.newTask,
+  removeTask: state.removeTask,
+  clearAllTasks: state.clearAllTasks,
+}) : {
+  tasks: state.tasks,
+  setTask: state.setTask,
+  newTask: state.newTask,
+  removeTask: state.removeTask,
+  clearAllTasks: state.clearAllTasks,
+});
+
+export const useControls = (selector) => useStore((state) => selector ? selector({
+  use24HourTime: state.use24HourTime,
+  startHour: state.startHour,
+  endHour: state.endHour,
+  numberOfHours: state.numberOfHours,
+  blockSize: state.blockSize,
+  setField: state.setField,
+}) : {
+  use24HourTime: state.use24HourTime,
+  startHour: state.startHour,
+  endHour: state.endHour,
+  numberOfHours: state.numberOfHours,
+  blockSize: state.blockSize,
+  setField: state.setField,
+});
+
+export const useDate = (selector) => useStore((state) => selector ? selector({
+  date: state.date,
+  setDate: state.setDate,
+}) : {
+  date: state.date,
+  setDate: state.setDate,
+});

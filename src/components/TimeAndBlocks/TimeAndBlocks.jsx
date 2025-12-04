@@ -1,17 +1,10 @@
-import styled from "styled-components";
+import { css } from "styled-system/css";
 import { useBlocks, useControls } from "store";
 import { Label } from "components/TimeLine";
 import { Block } from "components/Blocks";
 import { hour12, hour24 } from "utils/hour";
 
-const CombinedBlock = styled.div``;
-const TheBlocks = styled.div`
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-`;
-
-export const TimeAndBlocks = styled(({ className }) => {
+export const TimeAndBlocks = () => {
   const blocks = useBlocks((state) => state.blocks);
   const numberOfHours = useControls((state) => state.numberOfHours) * 1;
   const startHour = useControls((state) => state.startHour) * 1;
@@ -28,11 +21,15 @@ export const TimeAndBlocks = styled(({ className }) => {
     const status1 = blocks[blockId1]?.status ?? "free";
     const status2 = blocks[blockId2]?.status ?? "free";
     displayBlocks.push(
-      <CombinedBlock key={`Combined-${index}`}>
+      <div key={`Combined-${index}`}>
         <Label key={`TimeLine-${index}`} width={labelWidth}>
           {use24HourTime === true ? hour24(index) : hour12(index)}
         </Label>
-        <TheBlocks>
+        <div className={css({
+          display: "flex",
+          gap: "8px",
+          marginTop: "4px"
+        })}>
           <Block
             key={blockId1}
             blockId={blockId1}
@@ -45,14 +42,18 @@ export const TimeAndBlocks = styled(({ className }) => {
             status={status2}
             size={blockSize}
           ></Block>
-        </TheBlocks>
-      </CombinedBlock>
+        </div>
+      </div>
     );
   }
-  return <div className={className}>{displayBlocks}</div>;
-})`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-`;
+  return (
+    <div className={css({
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "8px",
+      marginBottom: "16px"
+    })}>
+      {displayBlocks}
+    </div>
+  );
+};
