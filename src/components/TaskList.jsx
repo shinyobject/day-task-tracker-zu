@@ -215,6 +215,7 @@ const Task = ({ task, lastTask, className, dragHandleProps }) => {
 export const TaskList = ({ isAddButton = false }) => {
   const { tasks, taskOrder, newTask, reorderTasks } = useTasks();
   const [draggedIndex, setDraggedIndex] = useState(null);
+  const dragImageRef = useRef(null);
 
   // Create ordered task array based on taskOrder
   // If taskOrder is empty/undefined, use existing task IDs as order
@@ -228,7 +229,33 @@ export const TaskList = ({ isAddButton = false }) => {
   const handleDragStart = (e, index) => {
     setDraggedIndex(index);
     e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/html", e.currentTarget);
+
+    // Create a custom drag image
+    const draggedElement = e.currentTarget.closest('[data-task-row]');
+    if (draggedElement) {
+      const clone = draggedElement.cloneNode(true);
+      clone.style.position = 'absolute';
+      clone.style.top = '-1000px';
+      clone.style.width = draggedElement.offsetWidth + 'px';
+      clone.style.opacity = '0.8';
+      clone.style.background = '#f0f0f0';
+      clone.style.border = '2px solid #109aed';
+      clone.style.borderRadius = '4px';
+      clone.style.padding = '4px';
+
+      document.body.appendChild(clone);
+      dragImageRef.current = clone;
+
+      e.dataTransfer.setDragImage(clone, e.offsetX, e.offsetY);
+
+      // Clean up after a short delay
+      setTimeout(() => {
+        if (dragImageRef.current) {
+          document.body.removeChild(dragImageRef.current);
+          dragImageRef.current = null;
+        }
+      }, 0);
+    }
   };
 
   // Handle drag over
@@ -278,11 +305,17 @@ export const TaskList = ({ isAddButton = false }) => {
     <div className={css({ margin: 0 })}>
       {taskArray.map((task, index) => {
         const doneClassName = task.done === true ? "done" : "";
+        const isDragging = draggedIndex === index;
 
         return (
           <div
             key={`Task-${task.taskId}`}
+            data-task-row
             onDragOver={(e) => handleDragOver(e, index)}
+            className={css({
+              opacity: isDragging ? 0.4 : 1,
+              transition: "opacity 0.2s"
+            })}
           >
             <Task
               className={doneClassName}

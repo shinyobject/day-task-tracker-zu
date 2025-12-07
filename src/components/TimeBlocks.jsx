@@ -99,7 +99,7 @@ const TaskBar = ({ blockSize, length, hasEnoughTimeLeft }) => {
 // Main TimeBlocks component
 export const TimeBlocks = ({ showFreeBlocks = false, showTaskBars = false }) => {
   const { blocks } = useBlocks();
-  const { tasks } = useTasks();
+  const { tasks, taskOrder } = useTasks();
   const { settings } = useSettings();
   const { numberOfHours, startHour, blockSize, use24HourTime } = settings;
 
@@ -138,8 +138,14 @@ export const TimeBlocks = ({ showFreeBlocks = false, showTaskBars = false }) => 
   // Render task bars
   if (showTaskBars) {
     let timeUsed = 0;
-    const taskArray = Object.values(tasks);
-    const tasksToDo = taskArray.filter((task) => task.done !== true);
+    // Get ordered tasks that are not done
+    const currentTaskIds = Object.keys(tasks);
+    const orderedTaskIds = (taskOrder && taskOrder.length > 0)
+      ? taskOrder.filter((id) => tasks[id])
+      : currentTaskIds;
+    const tasksToDo = orderedTaskIds
+      .map((id) => tasks[id])
+      .filter((task) => task.done !== true);
 
     const blocksArray = Object.values(blocks);
     const timeLeft = blocksArray.reduce(
@@ -168,7 +174,7 @@ export const TimeBlocks = ({ showFreeBlocks = false, showTaskBars = false }) => 
           timeUsed += task.length * 1;
           return (
             <TaskBar
-              key={`TaskBar-${index}`}
+              key={`TaskBar-${task.taskId}`}
               length={task.length}
               blockSize={blockSize}
               hasEnoughTimeLeft={hasEnoughTimeLeft}
